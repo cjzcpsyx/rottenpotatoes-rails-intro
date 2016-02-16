@@ -14,11 +14,17 @@ class MoviesController < ApplicationController
     # byebug
     @all_ratings = Movie.all_ratings
 
-    session[:ratings] = params[:ratings] || session[:ratings]
+    if !params[:ratings].nil?
+      session[:ratings] = params[:ratings]
+      redirect_to movies_path
+    end
     @movies = session[:ratings].nil? ? Movie.all : Movie.where(rating: session[:ratings].keys)
     @checked = session[:ratings].nil? ? @all_ratings : session[:ratings].keys
 
-    session[:sort_by] = params[:sort_by] || session[:sort_by]
+    if !params[:sort_by].nil?
+      session[:sort_by] = params[:sort_by]
+      redirect_to movies_path
+    end
     @movies = @movies.order(session[:sort_by])
     @sort_by = session[:sort_by]
   end
