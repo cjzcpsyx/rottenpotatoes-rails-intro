@@ -11,13 +11,20 @@ class MoviesController < ApplicationController
   end
 
   def index
+    # byebug
     if params[:ratings].nil?
-      @movies = Movie.all
+      if session[:ratings].nil?
+        @movies = Movie.all
+      else
+        @movies = Movie.where(rating: session[:ratings].keys)
+      end
     else
       @movies = Movie.where(rating: params[:ratings].keys)
+      session[:ratings] = params[:ratings]
     end
-    @movies = @movies.order!(params[:sort_by])
-    @sort_by = params[:sort_by]
+    @movies = @movies.order(params[:sort_by] || session[:sort_by])
+    @sort_by = params[:sort_by] || session[:sort_by]
+    session[:sort_by] = params[:sort_by] || session[:sort_by]
     @all_ratings = Movie.all_ratings
   end
 
