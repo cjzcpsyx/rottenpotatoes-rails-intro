@@ -16,7 +16,7 @@ class MoviesController < ApplicationController
 
     session[:ratings] = params[:ratings] || session[:ratings]
     @movies = session[:ratings].nil? ? Movie.all : Movie.where(rating: session[:ratings].keys)
-    @checked = session[:ratings].keys || @all_ratings
+    @checked = session[:ratings].nil? ? @all_ratings : session[:ratings].keys
 
     session[:sort_by] = params[:sort_by] || session[:sort_by]
     @movies = @movies.order(session[:sort_by])
